@@ -13,6 +13,7 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install --upgrade pip
       - run: pip install -r requirements.txt
+      - run: pip install matplotlib
       - run: python scripts/run_all.py --seed 1 && cp results/summary.json results/summary_seed1.json
       - run: python scripts/run_all.py --seed 2 && cp results/summary.json results/summary_seed2.json
       - run: python scripts/run_all.py --seed 3 && cp results/summary.json results/summary_seed3.json

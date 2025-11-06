@@ -11,7 +11,7 @@ python scripts/run_all.py --seed 123
 
 Results land in `results/summary.json`.
 
-Dependencies: see `requirements.txt` (pytest, matplotlib). No pandas required.
+Dependencies: see `requirements.txt` (pytest). Locally, matplotlib is optional. GitHub Actions installs matplotlib for the panel workflow and produces PNG charts as artifacts.
 
 ## What’s included
 - Programmatic tables from the 7 oriented Fano triples
