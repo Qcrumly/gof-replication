@@ -11,6 +11,8 @@ python scripts/run_all.py --seed 123
 
 Results land in `results/summary.json`.
 
+Dependencies: see `requirements.txt` (pytest, matplotlib). No pandas required.
+
 ## What’s included
 - Programmatic tables from the 7 oriented Fano triples
 - Journey engine (unit_step, collapse, scalar_step)

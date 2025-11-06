@@ -1,60 +1,64 @@
 from __future__ import annotations
 import json
 from pathlib import Path
-
 import matplotlib.pyplot as plt
-import pandas as pd
 
-RESULTS_DIR = Path("results")
-RESULTS_DIR.mkdir(exist_ok=True)
+RES = Path("results")
+RES.mkdir(exist_ok=True)
 
-
-def _load_json(path: Path):
+def _load_json(p: Path):
     try:
-        return json.loads(path.read_text())
+        return json.loads(p.read_text())
     except Exception:
         return None
 
-
-def build_demo_plot():
-    data = _load_json(RESULTS_DIR / "summary.json")
-    if not data:
-        print("No summary.json available; skipping demo plot")
+def demo_plot():
+    demo = _load_json(RES/"summary.json")
+    if not demo:
+        print("No results/summary.json found; skipping demo plot.")
         return
-    keys = ["lambda_hat", "p0_hat", "parity_even_frac", "alr_survivor_rate_upper_bound"]
-    values = [data.get(k, float("nan")) for k in keys]
+    keys = ["lambda_hat","p0_hat","parity_even_frac","alr_survivor_rate_upper_bound"]
+    vals = [demo.get(k, float("nan")) for k in keys]
     plt.figure()
-    plt.bar(keys, values)
+    plt.bar(range(len(keys)), vals)
+    plt.xticks(range(len(keys)), keys, rotation=20)
+    plt.title("Demo stats")
     plt.ylabel("value")
-    plt.title("Demo statistics")
-    plt.xticks(rotation=20)
     plt.tight_layout()
-    plt.savefig(RESULTS_DIR / "dashboard_demo.png")
+    plt.savefig(RES/"dashboard_demo.png")
     plt.close()
 
-
-def build_panel_plots():
-    rows = []
-    for path in RESULTS_DIR.glob("panel_summary_*_L*_N*.json"):
-        js = _load_json(path)
+def panel_plot():
+    # Gather all panel_summary_*.json files
+    summaries = []
+    for p in RES.glob("panel_summary_*_L*_N*.json"):
+        js = _load_json(p)
         if js:
-            rows.append(js)
-    if not rows:
-        print("No panel summaries found; skipping panel plots")
+            summaries.append(js)
+    if not summaries:
+        print("No panel summaries found; skipping panel plot.")
         return
-    df = pd.DataFrame(rows)
-    for length, subset in df.groupby("length"):
+    # Group by length and plot survivor_frac by mode
+    by_length = {}
+    for row in summaries:
+        L = row.get("length")
+        by_length.setdefault(L, []).append(row)
+
+    for L, rows in by_length.items():
+        # sort by mode for stable order
+        rows.sort(key=lambda r: r.get("mode",""))
+        modes = [r.get("mode","") for r in rows]
+        surv  = [r.get("survivor_frac", 0.0) for r in rows]
         plt.figure()
-        sub_sorted = subset.sort_values("mode")
-        plt.bar(sub_sorted["mode"], sub_sorted["survivor_frac"])
+        plt.bar(range(len(modes)), surv)
+        plt.xticks(range(len(modes)), modes)
+        plt.title(f"Survivor fraction by mode (L={L})")
         plt.ylabel("survivor_frac")
-        plt.title(f"Survivor fraction by mode (L={length})")
         plt.tight_layout()
-        plt.savefig(RESULTS_DIR / f"dashboard_survivor_L{length}.png")
+        plt.savefig(RES/f"dashboard_survivor_L{L}.png")
         plt.close()
 
-
-if __name__ == "__main__":
-    build_demo_plot()
-    build_panel_plots()
-    print("Dashboard images written to results/ directory")
+if __name__=="__main__":
+    demo_plot()
+    panel_plot()
+    print("Dashboard images saved to results/*.png")
