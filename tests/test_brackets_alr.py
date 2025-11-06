@@ -7,6 +7,7 @@ from src.gof_validations import (
     tokens_random_tree,
     full_alr,
     token_list_to_str,
+    journey_parity,
 )
 import random
 
@@ -39,3 +40,19 @@ def test_full_alr_deletes_block_and_preserves_parity():
     nf, audit = full_alr(toks, start)
     assert nf == []
     assert audit and audit[0]["before"] == token_list_to_str(toks)
+
+
+def test_full_alr_parity_invariant_randomized():
+    import random
+
+    rng = random.Random(123)
+    for _ in range(100):
+        start = State.unit(rng.randint(1, 7))
+        chain = [rng.randint(1, 7) for _ in range(20)]
+        toks, _ = compute_journey(start, chain)
+        p0 = journey_parity(toks, start)
+        nf, audit = full_alr(toks, start)
+        p1 = journey_parity(nf, start)
+        assert p0 == p1, (
+            f"Parity changed: {p0} -> {p1} via {token_list_to_str(toks)} (audit={audit})"
+        )

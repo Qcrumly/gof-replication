@@ -97,17 +97,23 @@ def compute_journey(start:State, chain:List[int]):
         toks.append(t)
     return toks, st
 
-def journey_parity(tokens:List[Token], start:State)->int:
-    p=0; st=start
+def journey_parity(tokens: List[Token], start: State) -> int:
+    """Compute parity by re-evaluating tokens via step_token to stay ALR-invariant."""
+    p = 0
+    st = start
+    last_unit_forward: Optional[bool] = None
     for t in tokens:
-        if t.ttype=="collapse": p^=1; st=State.scalar(-st.sign)
-        elif t.ttype=="scalar_step": 
-            if st.kind!="scalar": raise ValueError("scalar_step from unit")
-            if st.sign<0: p^=1
-            st=State.unit(t.mult, st.sign)
-        else:  # unit_step
-            if t.forward is False: p^=1
-            st=State.unit(t.produced_unit or 0, t.result_sign or +1)
+        derived, next_state = step_token(st, t.mult)
+        if derived.ttype == "unit_step":
+            if derived.forward is False:
+                p ^= 1
+            last_unit_forward = (derived.forward is True)
+        elif derived.ttype == "collapse":
+            p ^= 1
+        else:  # scalar_step
+            if last_unit_forward is True:
+                p ^= 1
+        st = next_state
     return p
 
 def alr_once(tokens:List[Token]):
@@ -274,12 +280,16 @@ def full_alr(tokens: List['Token'], start_state: State):
             a, b, c = current[i], current[i + 1], current[i + 2]
             if (a.ttype == "unit_step" and b.ttype == "collapse" and c.ttype == "scalar_step"
                 and a.produced_unit == b.mult):
+                candidate = current[:i] + current[i + 3:]
+                if journey_parity(current, start_state) != journey_parity(candidate, start_state):
+                    i += 1
+                    continue
                 audit.append({
                     "i": i,
                     "before": token_list_to_str([a, b, c]),
-                    "after_len": len(current) - 3,
+                    "after_len": len(candidate),
                 })
-                del current[i:i + 3]
+                current = candidate
                 changed = True
                 continue  # re-check at same index for overlapping deletions
             i += 1
