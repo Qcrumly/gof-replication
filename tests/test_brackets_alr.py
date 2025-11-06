@@ -37,8 +37,11 @@ def test_tokens_random_tree_reproducible():
 def test_full_alr_deletes_block_and_preserves_parity():
     start = State.unit(1)
     toks, _ = compute_journey(start, [2, 4, 3])
+    p0 = journey_parity(toks, start)
     nf, audit = full_alr(toks, start)
+    p1 = journey_parity(nf, start)
     assert nf == []
+    assert p0 == p1 == 0
     assert audit and audit[0]["before"] == token_list_to_str(toks)
 
 

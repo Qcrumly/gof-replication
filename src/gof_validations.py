@@ -98,22 +98,29 @@ def compute_journey(start:State, chain:List[int]):
     return toks, st
 
 def journey_parity(tokens: List[Token], start: State) -> int:
-    """Compute parity by re-evaluating tokens via step_token to stay ALR-invariant."""
+    """Parity rule aligned with ALR triple neutrality."""
     p = 0
     st = start
-    last_unit_forward: Optional[bool] = None
+    last_unit_forward: Optional[bool] = None  # orientation since last scalar entry
     for t in tokens:
-        derived, next_state = step_token(st, t.mult)
-        if derived.ttype == "unit_step":
-            if derived.forward is False:
+        if t.ttype == "unit_step":
+            if t.forward is False:
                 p ^= 1
-            last_unit_forward = (derived.forward is True)
-        elif derived.ttype == "collapse":
+            st = State.unit(t.produced_unit or 0, t.result_sign or +1)
+            last_unit_forward = (t.forward is True)
+        elif t.ttype == "collapse":
             p ^= 1
-        else:  # scalar_step
+            st = State.scalar(t.result_sign or (-st.sign))
+            # retain last_unit_forward so following scalar_step sees prior orientation
+        elif t.ttype == "scalar_step":
+            if st.kind != "scalar":
+                raise ValueError("scalar_step from unit")
             if last_unit_forward is True:
                 p ^= 1
-        st = next_state
+            st = State.unit(t.mult, t.result_sign or st.sign)
+            last_unit_forward = None
+        else:
+            raise ValueError(f"Unknown token type: {t.ttype}")
     return p
 
 def alr_once(tokens:List[Token]):
