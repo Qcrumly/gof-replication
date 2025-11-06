@@ -74,3 +74,5 @@ jobs:
             results/dashboard_survivor_L20.png
             results/dashboard_survivor_L30.png
             results/dashboard_survivor_L40.png
+            results/panel_summary_*_L*_N*.json
+            results/panel_*_L*.jsonl
