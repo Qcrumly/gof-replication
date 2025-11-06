@@ -1,21 +1,22 @@
 name: CI
 on:
-  push: { branches: [ main, bootstrap ] }
+  push:
+    branches: [ main, feature/* ]
   pull_request: {}
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
-    - run: python -m pip install --upgrade pip
-    - run: pip install -r requirements.txt
-    - run: pytest -q
-    - run: python scripts/run_all.py --seed 123
-    - name: Upload results
-      uses: actions/upload-artifact@v4
-      with:
-        name: gof-results
-        path: results/**
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+      - run: python scripts/run_all.py --seed 123
+      - name: Upload small demo artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gof-small-demo
+          path: results/summary.json

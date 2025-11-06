@@ -2,7 +2,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Tuple, Optional
-import math, random, json
+import random, re
 
 # Single source of truth: oriented Fano triples
 ORIENTED_TRIPLES = [
@@ -162,3 +162,131 @@ def run_demo(seed:int=42):
         "parity_even_frac": sum(1 for p in parities if p==0)/len(parities),
         "alr_survivor_rate_upper_bound": survivors/len(chains)
     }
+
+# ------------------------------
+# Bracket-aware journeys
+# ------------------------------
+def _norm_expr(s: str) -> str:
+    return re.sub(r"\s+", "", s.replace("×", "x"))
+
+def parse_parenthesized(expr: str):
+    """
+    Parse strings like "(((1x2)x4)x6)" or "(1x(2x(4x6)))".
+    Returns a tree composed of ints and ('*', left, right) tuples.
+    """
+    s = _norm_expr(expr)
+    if not s:
+        raise ValueError("Empty expression")
+    i = 0
+
+    def parse():
+        nonlocal i
+        if i >= len(s):
+            raise ValueError("Unexpected end of expression")
+        ch = s[i]
+        if ch.isdigit():
+            v = int(ch)
+            if v < 1 or v > 7:
+                raise ValueError("Unit index out of range")
+            i += 1
+            return v
+        if ch == '(':  # parse compound
+            i += 1
+            left = parse()
+            if i >= len(s) or s[i] != 'x':
+                raise ValueError("Expected 'x' operator")
+            i += 1
+            right = parse()
+            if i >= len(s) or s[i] != ')':
+                raise ValueError("Expected closing ')'")
+            i += 1
+            return ('*', left, right)
+        raise ValueError(f"Unexpected token {ch!r} at position {i}")
+
+    tree = parse()
+    if i != len(s):
+        raise ValueError("Trailing characters in expression")
+    return tree
+
+def _eval_tree_rec(start: State, node, consumed_first: bool) -> Tuple[List[Token], State, bool]:
+    if isinstance(node, int):
+        if not consumed_first:
+            if start.kind != "unit" or start.idx != node:
+                raise ValueError("Expression base does not match start unit")
+            return [], start, True
+        tok, st = step_token(start, node)
+        return [tok], st, True
+    op, left, right = node
+    if op != '*':
+        raise ValueError("Unknown node operator")
+    toks_left, state_left, consumed_left = _eval_tree_rec(start, left, consumed_first)
+    toks_right, state_right, consumed_right = _eval_tree_rec(state_left, right, consumed_left)
+    return toks_left + toks_right, state_right, consumed_right
+
+def eval_tree(start: State, tree) -> Tuple[List[Token], State]:
+    tokens, state, consumed = _eval_tree_rec(start, tree, False)
+    if not consumed:
+        raise ValueError("Expression did not contain a starting unit")
+    return tokens, state
+
+def tokens_from_expr(start_unit: int, expr: str) -> List[Token]:
+    tree = parse_parenthesized(expr)
+    toks, _ = eval_tree(State.unit(start_unit), tree)
+    return toks
+
+def tokens_random_tree(start_unit: int, chain: List[int], rng: random.Random) -> List[Token]:
+    """Generate tokens by evaluating a random full binary tree over `chain`."""
+    if not chain:
+        return []
+
+    def build(seq: List[int]):
+        if len(seq) == 1:
+            return seq[0]
+        split = rng.randint(1, len(seq) - 1)
+        return ('*', build(seq[:split]), build(seq[split:]))
+
+    seq = [start_unit] + chain
+    tree = build(seq)
+    toks, _ = eval_tree(State.unit(start_unit), tree)
+    return toks
+
+# ------------------------------
+# Full ALR with audit logging
+# ------------------------------
+def token_to_str(tok: 'Token') -> str:
+    if tok.ttype == "collapse":
+        return f"d0*x{tok.mult}"
+    if tok.ttype == "scalar_step":
+        return f"scalarx{tok.mult}"
+    return f"d{tok.dim}x{tok.mult}"
+
+def token_list_to_str(tokens: List['Token']) -> List[str]:
+    return [token_to_str(t) for t in tokens]
+
+def full_alr(tokens: List['Token'], start_state: State):
+    """Apply anchored three-block deletions with audit logging."""
+    current = tokens[:]
+    audit: List[dict] = []
+    while True:
+        changed = False
+        i = 0
+        while i <= len(current) - 3:
+            a, b, c = current[i], current[i + 1], current[i + 2]
+            if (a.ttype == "unit_step" and b.ttype == "collapse" and c.ttype == "scalar_step"
+                and a.produced_unit == b.mult):
+                audit.append({
+                    "i": i,
+                    "before": token_list_to_str([a, b, c]),
+                    "after_len": len(current) - 3,
+                })
+                del current[i:i + 3]
+                changed = True
+                continue  # re-check at same index for overlapping deletions
+            i += 1
+        if not changed:
+            break
+
+    parity_before = journey_parity(tokens, start_state)
+    parity_after = journey_parity(current, start_state)
+    assert parity_before == parity_after, "ALR must preserve parity"
+    return current, audit
