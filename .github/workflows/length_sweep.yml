@@ -1,0 +1,76 @@
+name: Length Sweep Panels (Artifacts)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ feature/length-sweep-artifacts ]
+
+jobs:
+  panel_matrix:
+    name: panel (${{ matrix.mode }}, L=${{ matrix.length }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [left, right, random]
+        length: [10, 20, 30, 40]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      # Install matplotlib only in CI for charts; local remains optional
+      - run: pip install matplotlib
+      - name: Run panel
+        run: |
+          python scripts/run_panel.py \
+            --length ${{ matrix.length }} \
+            --samples 20000 \
+            --seed 123 \
+            --expr-mode ${{ matrix.mode }} \
+            --panel-out results/panel_${{ matrix.mode }}_L${{ matrix.length }}.jsonl \
+            --audit
+      - name: Upload panel artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: panel_${{ matrix.mode }}_L${{ matrix.length }}
+          path: |
+            results/panel_${{ matrix.mode }}_L${{ matrix.length }}.jsonl
+            results/panel_summary_${{ matrix.mode }}_L${{ matrix.length }}_N20000.json
+
+  aggregate_dashboard:
+    name: aggregate dashboard
+    needs: [panel_matrix]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - run: pip install matplotlib
+      - name: Download all panel artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: results_collected
+      - name: Consolidate results into ./results
+        run: |
+          mkdir -p results
+          find results_collected -type f -name "*.json" -exec cp {} results/ \;
+          find results_collected -type f -name "*.jsonl" -exec cp {} results/ \;
+      - name: Build dashboard
+        run: |
+          python scripts/dashboard.py
+      - name: Upload dashboards
+        uses: actions/upload-artifact@v4
+        with:
+          name: length-sweep-dashboards
+          path: |
+            results/dashboard_demo.png
+            results/dashboard_survivor_L10.png
+            results/dashboard_survivor_L20.png
+            results/dashboard_survivor_L30.png
+            results/dashboard_survivor_L40.png

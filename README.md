@@ -44,3 +44,11 @@ python scripts/dashboard.py
 
 ### Results & artifacts
 Large outputs (JSONL/PNGs) are not committed to the repo. The CI workflows produce them and upload as downloadable Artifacts in the GitHub Actions run.
+
+## Length Sweep (panels + dashboards)
+To run a full length sweep (L = 10, 20, 30, 40) across modes (left, right, random):
+1. Go to **Actions → Length Sweep Panels (Artifacts)**.
+2. Click **Run workflow** (no inputs needed).
+3. When it finishes, open the run → **Artifacts** to download:
+   - Panel JSONL + summary JSON for each (mode, L)
+   - Consolidated survivor charts (PNGs) under `length-sweep-dashboards`
