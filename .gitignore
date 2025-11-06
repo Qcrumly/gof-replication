@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv/
+results/*.jsonl
+results/*.png
+results/summary_seed*.json
