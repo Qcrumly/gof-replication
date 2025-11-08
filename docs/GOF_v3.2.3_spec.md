@@ -66,7 +66,7 @@ Non-scalar step: \(\langle d_r \times i \rangle\) where \(d_r\) is the Fano line
 
 Scalar step: \(\langle \text{scalar} \times i \rangle\) when the accumulator is ±1 and the next multiplicand is \(e_i\).
 
-Collapse (unified rule): \(\langle d_0* \times i \rangle\) whenever a unit–unit step has matching absolute indices \(|a_{t-1}| = |x_t| = i\), sending the accumulator to the real axis. The result is \(-1\) if the accumulator was \(+e_i\) and \(+1\) if it was \(-e_i\). (This covers terminal \(( -e_k ) e_k = +1\) in \(\Sigma_+\) and \(e_i ( -e_i ) = +1\) in \(\Sigma_{\pm}\).)
+Collapse (unified rule): \(\langle d_0^\* \times i \rangle\) whenever a unit–unit step has matching absolute indices \(|a_{t-1}| = |x_t| = i\), sending the accumulator to the real axis. The result is \(-1\) if the accumulator was \(+e_i\) and \(+1\) if it was \(-e_i\). (This covers terminal \(( -e_k ) e_k = +1\) in \(\Sigma_+\) and \(e_i ( -e_i ) = +1\) in \(\Sigma_{\pm}\).)
 
 Alt-assoc labeling (with example). In journeys using a non-left parenthesization, “× i” denotes the leaf token introduced at that micro-step (the input symbol), not necessarily the current right operand under left fold.
 Example (same chain \([1,2,3]\) under right-nesting \(1 \cdot (2 \cdot 3)\)): \(\langle d_2 \times 3, d_5 \times 1 \rangle\).
@@ -147,9 +147,9 @@ Examples for benchmarking and demos (see Appendix A).
 
 ### 4.2 Collapses (\(d_0^*\)) — unified definition
 
-In \(\Sigma_+\) (tokens \(e_1,\dots,e_7\) only): a collapse is any unit–unit step where the accumulator is ±\(e_i\) and the next token is \(e_i\). The result is \(-1\) if the accumulator is \(+e_i\) and \(+1\) if it is \(-e_i\). Log this as \(\langle d_0* \times i \rangle\).
+In \(\Sigma_+\) (tokens \(e_1,\dots,e_7\) only): a collapse is any unit–unit step where the accumulator is ±\(e_i\) and the next token is \(e_i\). The result is \(-1\) if the accumulator is \(+e_i\) and \(+1\) if it is \(-e_i\). Log this as \(\langle d_0^\* \times i \rangle\).
 
-In \(\Sigma_{\pm}\): likewise—any unit–unit step with matching absolute indices \(|u| = |v| = i\) collapses to a real scalar (±1); log \(\langle d_0* \times i \rangle\).
+In \(\Sigma_{\pm}\): likewise—any unit–unit step with matching absolute indices \(|u| = |v| = i\) collapses to a real scalar (±1); log \(\langle d_0^\* \times i \rangle\).
 
 Dimensions always use absolute indices; signs affect only the resulting scalar.
 
@@ -193,7 +193,7 @@ Model the reduced fraction by
 
 \(F(S) = 1 - \exp(-(aS + bS^2)),\quad a = \mu_2^*,\ b = \alpha_3 \, \mu_3^*.\)
 
-**Existence (paper-level).** If \(a^2 + 4b \ge \ln 2\), then \(F(1/2) \ge 1/2\) and a positive fixed point \(S^* \in [1/2,1]\) exists. If \(a + 2b < 1\), then \(S=0\) is the only fixed point.
+**Existence (paper-level).** If \(\tfrac a2 + \tfrac b4 \ge \ln 2\), then \(F(1/2) \ge 1/2\) and a positive fixed point \(S^* \in [1/2,1]\) exists. If \(a + 2b < 1\), then \(S=0\) is the only fixed point.
 
 **Stability remark.** At any fixed point, \(F'(S^*) = (a + 2b S^*)(1 - S^*)\).
 
@@ -234,9 +234,9 @@ Appendix A — Canonical Journey Library 📚
 
 | ID | Description | Chain | Formal Journey | Q-Vector |
 | --- | --- | --- | --- | --- |
-| S-L2-N1 | Survivor to \(-1\) | \([1,1]\) | \(\langle d_0* \times 1 \rangle\) | \([0,0,0,0,0,0,0]\) |
-| S-L3-P1 | Survivor to \(+1\) | \([6,5,1]\) | \(\langle d_5 \times 5, d_0* \times 1 \rangle\) | \([0,0,0,0,1,0,0]\) |
-| R-L4-C2 | Reducible cascade to \(+1\) | \([3,3,5,5]\) | \(\langle d_0* \times 3, \text{scalar} \times 5, d_0* \times 5 \rangle\) | \([0,0,0,0,0,0,0]\) |
+| S-L2-N1 | Survivor to \(-1\) | \([1,1]\) | \(\langle d_0^\* \times 1 \rangle\) | \([0,0,0,0,0,0,0]\) |
+| S-L3-P1 | Survivor to \(+1\) | \([6,5,1]\) | \(\langle d_5 \times 5, d_0^\* \times 1 \rangle\) | \([0,0,0,0,1,0,0]\) |
+| R-L4-C2 | Reducible cascade to \(+1\) | \([3,3,5,5]\) | \(\langle d_0^\* \times 3, \text{scalar} \times 5, d_0^\* \times 5 \rangle\) | \([0,0,0,0,0,0,0]\) |
 | N-L3-A | Non-assoc (left fold) | \([1,2,3]\) | \(\langle d_1 \times 2, d_3 \times 3 \rangle\) | \([1,0,1,0,0,0,0]\) |
 | N-L3-B† | Non-assoc (alt-assoc example) | \([1,2,3]\) | \(\langle d_2 \times 3, d_5 \times 1 \rangle\) | \([0,1,0,0,1,0,0]\) |
 
@@ -347,14 +347,14 @@ Let \(F(S) = 1 - \exp(-(aS + bS^2)),\ g(S) = F(S) - S.\)
 
 ### H.14.1 Existence & subcriticality (paper-level)
 
-Since \(g(1) = F(1) - 1 = -e^{-(a+b)} < 0\) and \(g(1/2) \ge 0\) whenever \(a^2 + 4b \ge \ln 2\), the Intermediate Value Theorem yields a fixed point \(S^* \in [1/2,1]\).
+Since \(g(1) = F(1) - 1 = -e^{-(a+b)} < 0\) and \(g(1/2) \ge 0\) whenever \(\tfrac a2 + \tfrac b4 \ge \ln 2\), the Intermediate Value Theorem yields a fixed point \(S^* \in [1/2,1]\).
 If \(a + 2b < 1\), then \(F'(S) \le a + 2b ⇒ g'(S) \le a + 2b - 1 < 0\) on \([0,1]\); only \(S=0\) is a fixed point.
 
 ### H.14.2 Symbolic lower bounds (no numerics)
 
 Window \(W ≥ 9\):
 
-\(χ(W) = 1 - (6/7)^W,\quad p_0 = 1/14,\quad \bar{q} = 1 - χ(W) p_0.\)
+\(\chi(W) = 1 - (6/7)^W,\quad p_0 = 1/14,\quad \bar{q} = 1 - \chi(W) p_0.\)
 
 Mixing assumption (H.14.M). On no-collapse steps, \(\Pr(\text{backward}), \Pr(\text{forward}) ≥ η ∈ (0, 1/2]\). Any \(k\)-bit no-collapse pattern occurs with probability ≥ \((η \bar{q})^k\).
 
@@ -424,9 +424,9 @@ License: CC BY-NC 4.0
 
 Changes from v3.2.2
 
-- Unified collapse rule (\(\Sigma^+\) and \(\Sigma^{\pm}\)): any matching-index unit–unit step collapses to a real scalar; logging \(\langle d_0* \times i \rangle\) covers terminal \((-e_k)e_k = +1\).
+- Unified collapse rule (\(\Sigma^+\) and \(\Sigma^{\pm}\)): any matching-index unit–unit step collapses to a real scalar; logging \(\langle d_0^\* \times i \rangle\) covers terminal \((-e_k)e_k = +1\).
 - ALR guard made sign-agnostic with absolute-index predicate \(|a_{t-1}| = |x_t|\).
-- Removed stray/duplicated lines in H.14.2; kept the single correct boxed inequality and \(χ(W) = 1 - (6/7)^W\).
+- Removed stray/duplicated lines in H.14.2; kept the single correct boxed inequality and \(\chi(W) = 1 - (6/7)^W\).
 - Confluence phrasing corrected to “unique ALR normal form” (no “modulo value”).
 - Ensured consistent rendering of \(d_0^*\) in math; ASCII card remains d0*=*.
 - Alt-assoc example explicitly labeled “(same chain [1,2,3]).”
