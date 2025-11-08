@@ -52,7 +52,7 @@ Mnemonic shapes (optional):
 Spokes \(d_1 = \{1,2,4\}\) (╱), \(d_3 = \{3,4,6\}\) (│), \(d_4 = \{4,5,7\}\) (╲);
 Edges \(d_2 = \{2,3,5\}\) (—), \(d_5 = \{5,6,1\}\) (═), \(d_7 = \{7,1,3\}\) (≡);
 Circle \(d_6 = \{6,7,2\}\) (O);
-Scalar channel \(d_0^*\) marks a collapse.
+Scalar channel \(d_0^\*\) marks a collapse.
 
 ### 2.3 Journey Notation
 
@@ -105,7 +105,7 @@ A triple \([U,C,S]\) centered at a collapse step is deletable iff:
 1. the center is a matching-index event \(|a_{t-1}| = |x_t| = k\), and
 2. the three micro-steps lie in a single quaternionic subalgebra \(\mathbb{H}\) such that \(((a_{t-1} x_t) x_{t+1}) = a_{t-1} (x_t x_{t+1})\).
 
-By alternativity, both \(\mathbb{H}_1 = \langle a_{t-1}, x_{t+1} \rangle\) and \(\mathbb{H}_2 = \langle x_t, x_{t+1} \rangle\) are associative quaternionic subalgebras containing \((a_{t-1}, x_t, x_{t+1})\); ALR is legal in either frame.
+By alternativity, each of \(\mathbb{H}_L = \langle a_{t-1}, x_t \rangle\) and \(\mathbb{H}_R = \langle x_t, x_{t+1} \rangle\) is an associative quaternionic subalgebra. Use any \(\mathbb{H}\) that contains all of \((a_{t-1}, x_t, x_{t+1})\); if neither two-generator frame contains the triple, the guard does not hold and ALR must not fire.
 
 **Termination.** Each deletion reduces length by 3; no infinite descent.
 
@@ -124,7 +124,7 @@ Type B overlap: triples share at most one \(U\) or \(S\). The deletions commute;
 
 ### 3.1 Q-Vectors
 
-For a journey \(J\), the Q-vector \(Q(J) = [q_1,\dots,q_7]\) counts uses of \(d_1..d_7\). It excludes \(d_0^*\) and all scalar× steps.
+For a journey \(J\), the Q-vector \(Q(J) = [q_1,\dots,q_7]\) counts uses of \(d_1..d_7\). It excludes \(d_0^\*\) and all scalar× steps.
 
 ### 3.2 Path Divergence & NAI (heuristic)
 
@@ -145,7 +145,7 @@ Examples for benchmarking and demos (see Appendix A).
 
 \(1 \cdot x = x \cdot 1 = x.\)
 
-### 4.2 Collapses (\(d_0^*\)) — unified definition
+### 4.2 Collapses (\(d_0^\*\)) — unified definition
 
 In \(\Sigma_+\) (tokens \(e_1,\dots,e_7\) only): a collapse is any unit–unit step where the accumulator is ±\(e_i\) and the next token is \(e_i\). The result is \(-1\) if the accumulator is \(+e_i\) and \(+1\) if it is \(-e_i\). Log this as \(\langle d_0^\* \times i \rangle\).
 
@@ -175,9 +175,9 @@ Geometry-local (GOF-structural). Allow only ALR deletions (anchored 3-blocks) wh
 Scope. Unless explicitly stated, all results in this section are for \(\Sigma_+\).
 
 Survivor predicate (once, up front). A survivor is a word over \(\Sigma_+\) in ALR normal form (no anchored 3-block deletion applies).
-For \(\Sigma_+\) and \(L\ge4\), any survivor has exactly one collapse and it is terminal (Lemma G.2).
+For \(\Sigma_+\) and \(L \ge 4\), any survivor has exactly one collapse and it is terminal (Lemma G.2).
 
-**Theorem G (parity-free identity).** In \(\Sigma_+\), for length \(L\ge4\), every survivor evaluates to \(+1\). Even parity then follows as a corollary. (See Appendix G for full proofs based on alternativity and flexibility.)
+**Theorem G (parity-free identity).** In \(\Sigma_+\), for length \(L \ge 4\), every survivor evaluates to \(+1\). Even parity then follows as a corollary. (See Appendix G for full proofs based on alternativity and flexibility.)
 
 Illustrations (not theorems).
 \(L=2:\) \([i,i] \rightarrow -1;\) mixed pairs \([i,j]\) (\(i \ne j\)) → units.
@@ -185,7 +185,7 @@ Illustrations (not theorems).
 
 ### 5.3 Survivor Strategies (empirical)
 
-Typical survivors show 4–5 distinct dimensions, gentle cycling, and fewer \(d_0^*\) opportunities. Exact rates are empirical (Appendix R).
+Typical survivors show 4–5 distinct dimensions, gentle cycling, and fewer \(d_0^\*\) opportunities. Exact rates are empirical (Appendix R).
 
 ### 5.4 Percolation operator (model + certificate; stability note)
 
@@ -212,7 +212,7 @@ Chain of length \(n\): \(O(n)\)
 
 ### 6.2 Core Data
 
-Dimension lookup: \((i,j) \rightarrow d_r\) (or \(d_0^*\) if \(|i|=|j|\), collapse).
+Dimension lookup: \((i,j) \rightarrow d_r\) (or \(d_0^\*\) if \(|i|=|j|\), collapse).
 
 Result/sign: from §2.2 oriented triples.
 
@@ -230,7 +230,7 @@ GOF turns octonion multiplication into observable journeys. This visibility supp
 Appendix A — Canonical Journey Library 📚
 ---------------------------------------
 
-*Note. Examples only (not normative). Formal journeys follow the step order of the chosen association. Q-vectors exclude \(d_0^*\) and all scalar× steps.*
+*Note. Examples only (not normative). Formal journeys follow the step order of the chosen association. Q-vectors exclude \(d_0^\*\) and all scalar× steps.*
 
 | ID | Description | Chain | Formal Journey | Q-Vector |
 | --- | --- | --- | --- | --- |
@@ -251,7 +251,7 @@ Appendix B — Quick Reference Card 🎯
 
 **Decision Tree**
 
-Two units? same absolute index? → YES: \(d_0^*\) (collapse to ±1)
+Two units? same absolute index? → YES: \(d_0^\*\) (collapse to ±1)
 → NO: find Fano line → \(d_r\)
 
 Scalar ±1? multiply next unit → scalar×k
@@ -261,14 +261,14 @@ Forward on cycle = +, backward = −.
 
 **Survivor spotting (empirical)**
 Many distinct dims or repeats → likely reducible.
-4–5 dims, mild cycling, L≥4 → survivor candidate.
-L≥4 survivor ⇒ +1 (Theorem G).
+4–5 dims, mild cycling, \(L \ge 4\) → survivor candidate.
+\(L \ge 4\) survivor ⇒ +1 (Theorem G).
 
 **ASCII**
 / - || \\ === O ==== * ↔ d₁..d₇, d₀*
 
 **Diagnostics**
-Check left-fold & \(\Sigma_+\) scope; Q-vector excludes \(d_0^*\), scalar×; bracket choice matters.
+Check left-fold & \(\Sigma_+\) scope; Q-vector excludes \(d_0^\*\), scalar×; bracket choice matters.
 
 Appendix C — ALR Semantics (formal details & diamonds)
 -------------------------------------------------------
@@ -336,7 +336,7 @@ Let W be the prefix before the unique terminal collapse. Then \(\mathcal{P}(W) \
 
 **Theorem G (Parity-free identity; even parity follows)**
 
-Every survivor (length \(\ge4\), \(\Sigma_+\)) evaluates to \(+1\). Even parity follows.
+Every survivor (length \(\ge 4\), \(\Sigma_+\)) evaluates to \(+1\). Even parity follows.
 
 *Proof.* By G.2, exactly one (terminal) collapse. By G.4, \(\mathcal{P}(W) \equiv 1\); adding the terminal collapse yields \(\mathcal{P}(S) \equiv 0\). The last pre-collapse unit is \(-e_k\), so \((-e_k)e_k = +1\). ∎
 
@@ -352,27 +352,27 @@ If \(a + 2b < 1\), then \(F'(S) \le a + 2b ⇒ g'(S) \le a + 2b - 1 < 0\) on \([
 
 ### H.14.2 Symbolic lower bounds (no numerics)
 
-Window \(W ≥ 9\):
+Window \(W \ge 9\):
 
 \(\chi(W) = 1 - (6/7)^W,\quad p_0 = 1/14,\quad \bar{q} = 1 - \chi(W) p_0.\)
 
-Mixing assumption (H.14.M). On no-collapse steps, \(\Pr(\text{backward}), \Pr(\text{forward}) ≥ η ∈ (0, 1/2]\). Any \(k\)-bit no-collapse pattern occurs with probability ≥ \((η \bar{q})^k\).
+Mixing assumption (H.14.M). On no-collapse steps, \(\Pr(\text{backward}), \Pr(\text{forward}) \ge \eta \in (0, 1/2]\). Any \(k\)-bit no-collapse pattern occurs with probability \(\ge (\eta \bar{q})^k\).
 
 Counts. 9-bit hinge strings (contain 010 or 101) = \(2^9 - 110 = 402\).
 4-bit adjacent-edge strings (weight 1 or 3) = \(8/16\).
 
 Bounds.
 
-\(\mu_3^* ≥ (η \bar{q})^9 · 402/512,\quad \mu_2^* ≥ \tfrac{1}{2} (η \bar{q})^4,\quad α_3 ≥ 1 + \tfrac{\text{amp}-1}{2} (\text{amp} ≥ 2).\)
+\(\mu_3^* \ge (\eta \bar{q})^9 \cdot 402/512,\quad \mu_2^* \ge \tfrac{1}{2} (\eta \bar{q})^4,\quad \alpha_3 \ge 1 + \tfrac{\text{amp}-1}{2} (\text{amp} \ge 2).\)
 
 Sufficient condition (final).
 
-\[ \tfrac{1}{4} (η \bar{q})^4 + \tfrac{1}{4} \bigl(1 + \tfrac{\text{amp}-1}{2}\bigr) (η \bar{q})^9 · 402/512 ≥ \ln 2. \]
+\[ \tfrac{1}{4} (\eta \bar{q})^4 + \tfrac{1}{4} \bigl(1 + \tfrac{\text{amp}-1}{2}\bigr) (\eta \bar{q})^9 \cdot 402/512 \ge \ln 2. \]
 
 ### H.14.3 Certificate (matrix-free; independent of H.14.M)
 
 Config manifest: artifacts/H14_fsa_config.json, CONFIG_SHA256 = 385b0985dfac7e213819b49ce6c7a4fc0dee1248fa59f53f0d2ca75ba2a7f014.
-Reference params: \(W = 13;\) hinge = 1 (if last-9 has 010/101); neutral = 1; bad last-4 0000/1111 = 6/7; capacity = 1 if c ≥ 1, else 2/3; amp = 3 (measurement-only).
+Reference params: \(W = 13;\) hinge = 1 (if last-9 has 010/101); neutral = 1; bad last-4 0000/1111 = 6/7; capacity = 1 if \(c \ge 1\), else 2/3; amp = 3 (measurement-only).
 
 Stationary solver: matrix-free (Numba scatter), state size \(N = 7 \cdot 2 \cdot 2^{13} \cdot 3 = 344{,}064\).
 
@@ -428,7 +428,7 @@ Changes from v3.2.2
 - ALR guard made sign-agnostic with absolute-index predicate \(|a_{t-1}| = |x_t|\).
 - Removed stray/duplicated lines in H.14.2; kept the single correct boxed inequality and \(\chi(W) = 1 - (6/7)^W\).
 - Confluence phrasing corrected to “unique ALR normal form” (no “modulo value”).
-- Ensured consistent rendering of \(d_0^*\) in math; ASCII card remains d0*=*.
+- Ensured consistent rendering of \(d_0^\*\) in math; ASCII card remains d0*=*.
 - Alt-assoc example explicitly labeled “(same chain [1,2,3]).”
 - Added named ALR soundness lemma and included ASCII diamonds for local confluence.
 
