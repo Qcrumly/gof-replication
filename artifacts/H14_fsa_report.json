@@ -1,0 +1,17 @@
+{
+  "schema": "gof.percolation.report",
+  "version": "1.0",
+  "window": 13,
+  "mu2_star": 0.475923,
+  "mu3_star": 0.948573,
+  "alpha3": 2.0,
+  "F_values": {
+    "0.25": 0.211444,
+    "0.50": 0.509460,
+    "0.75": 0.759272
+  },
+  "S_star": 0.448629,
+  "ceiling": 0.906806,
+  "derivative_at_fixed_point": 1.178865,
+  "notes": "Stationary distribution summary for Appendix H.14 certificate."
+}

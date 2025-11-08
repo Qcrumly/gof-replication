@@ -1,0 +1,15 @@
+{
+  "schema": "gof.percolation.config",
+  "version": "1.0",
+  "window": 13,
+  "hinge_pattern": ["010", "101"],
+  "neutral_weight": 1,
+  "bad_last4_weight": "6/7",
+  "capacity_rule": {
+    "threshold": 1,
+    "above": 1.0,
+    "below": 0.6666666667
+  },
+  "amplification": 3,
+  "notes": "Matrix-free stationary solver configuration for Appendix H.14."
+}
