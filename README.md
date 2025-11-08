@@ -45,6 +45,8 @@ python scripts/dashboard.py
 ### Results & artifacts
 Large outputs (JSONL/PNGs) are not committed to the repo. The CI workflows produce them and upload as downloadable Artifacts in the GitHub Actions run.
 
+For theoretical context, see **Theorem G** (parity-free identity) and **Appendix H.14** (percolation certificate) in `docs/GOF_v3.2.3_spec.md`.
+
 ## Length Sweep (panels + dashboards)
 To run a full length sweep (L = 10, 20, 30, 40) across modes (left, right, random):
 1. Go to **Actions → Length Sweep Panels (Artifacts)**.

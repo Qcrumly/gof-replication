@@ -89,8 +89,8 @@ Define the \(\mathbb{Z}_2\) parity of a journey \(J\):
 \[ \mathcal{P}(J) \equiv \#\{\text{backward unit steps}\} + \#\{\text{collapses}\} + \mathbf{1}\{\text{scalar re-entry after a forward step}\} \pmod{2}. \]
 
 Glossary.
-Backward = the unit step goes against the oriented 3-cycle at that line.
-Scalar re-entry = a step from ±1 into the unit sphere; contribute 1 iff the preceding unit step was forward.
+Backward — the unit step goes against the oriented 3-cycle at that line.
+Scalar re-entry — a step from ±1 into the unit sphere; contribute 1 iff the preceding unit step was forward.
 With these rules, the anchored triple \([U,C,S]\) has parity 0 mod 2, so ALR deletions preserve \(\mathcal{P}\).
 
 ### 2.6 ALR (Anchor-Local Reduction): formal rewrite system
@@ -212,7 +212,7 @@ Chain of length \(n\): \(O(n)\)
 
 ### 6.2 Core Data
 
-Dimension lookup: \((i,j) \rightarrow d_r\) (or \(d_0^*\) if \(|i|=|j|\)).
+Dimension lookup: \((i,j) \rightarrow d_r\) (or \(d_0^*\) if \(|i|=|j|\), collapse).
 
 Result/sign: from §2.2 oriented triples.
 
@@ -230,7 +230,7 @@ GOF turns octonion multiplication into observable journeys. This visibility supp
 Appendix A — Canonical Journey Library 📚
 ---------------------------------------
 
-*Note. Examples only. Formal journeys follow the step order of the chosen association. Q-vectors exclude \(d_0^*\) and all scalar× steps.*
+*Note. Examples only (not normative). Formal journeys follow the step order of the chosen association. Q-vectors exclude \(d_0^*\) and all scalar× steps.*
 
 | ID | Description | Chain | Formal Journey | Q-Vector |
 | --- | --- | --- | --- | --- |
@@ -371,7 +371,7 @@ Sufficient condition (final).
 
 ### H.14.3 Certificate (matrix-free; independent of H.14.M)
 
-Config manifest: artifacts/H14_fsa_config.json, CONFIG_SHA256 = <PASTE_HASH_HERE>.
+Config manifest: artifacts/H14_fsa_config.json, CONFIG_SHA256 = 385b0985dfac7e213819b49ce6c7a4fc0dee1248fa59f53f0d2ca75ba2a7f014.
 Reference params: \(W = 13;\) hinge = 1 (if last-9 has 010/101); neutral = 1; bad last-4 0000/1111 = 6/7; capacity = 1 if c ≥ 1, else 2/3; amp = 3 (measurement-only).
 
 Stationary solver: matrix-free (Numba scatter), state size \(N = 7 \cdot 2 \cdot 2^{13} \cdot 3 = 344{,}064\).

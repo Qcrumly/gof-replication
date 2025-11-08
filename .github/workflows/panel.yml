@@ -31,3 +31,5 @@ jobs:
             results/panel_summary_random_L30_N50000.json
             results/dashboard_demo.png
             results/dashboard_survivor_L30.png
+            artifacts/H14_fsa_config.json
+            artifacts/H14_fsa_report.json
