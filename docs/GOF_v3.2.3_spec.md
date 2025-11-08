@@ -130,7 +130,7 @@ For a journey \(J\), the Q-vector \(Q(J) = [q_1,\dots,q_7]\) counts uses of \(d_
 
 For two journeys \(J_A, J_B\) of the same symbol sequence under different bracketings:
 
-\( \Delta Q = Q_A - Q_B,\quad \|\Delta Q\| = \sum_r (q_{A,r} - q_{B,r})^2. \)
+\( \Delta Q = Q_A - Q_B,\quad \|\Delta Q\|_2 = \sqrt{\sum_r (q_{A,r} - q_{B,r})^2 }. \)
 
 Heuristic interpretation only; consider normalizing by non-scalar steps for cross-length plots.
 
