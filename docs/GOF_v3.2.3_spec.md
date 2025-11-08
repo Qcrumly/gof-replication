@@ -115,7 +115,7 @@ Type A overlap: two anchored triples share the middle collapse \(C\). Both delet
 
 Type B overlap: triples share at most one \(U\) or \(S\). The deletions commute; both sequences reduce to a common word.
 
-**Confluence.** By Newman’s Lemma (termination + local confluence ⇒ confluence), ALR is confluent: every journey reduces to a unique ALR normal form.
+**Confluence.** By Newman’s Lemma (termination + local confluence \(\Rightarrow\) confluence), ALR is confluent: every journey reduces to a unique ALR normal form.
 
 (Detailed diamonds with \(\mathbb{H}\) witnesses appear in Appendix C.)
 
@@ -212,7 +212,7 @@ Chain of length \(n\): \(O(n)\)
 
 ### 6.2 Core Data
 
-Dimension lookup: \((i,j) \rightarrow d_r\) (or \(d_0^\*\) if \(|i|=|j|\), collapse).
+Dimension lookup: \((i,j) \to d_r\) (or \(d_0^\*\) if \(|i|=|j|\), collapse).
 
 Result/sign: from §2.2 oriented triples.
 
@@ -262,7 +262,7 @@ Forward on cycle = +, backward = −.
 **Survivor spotting (empirical)**
 Many distinct dims or repeats → likely reducible.
 4–5 dims, mild cycling, \(L \ge 4\) → survivor candidate.
-\(L \ge 4\) survivor ⇒ +1 (Theorem G).
+\(L \ge 4\) survivor \(\Rightarrow\) \(+1\) (Theorem G).
 
 **ASCII**
 / - || \\ === O ==== * ↔ d₁..d₇, d₀*
@@ -305,7 +305,7 @@ Type B (touching steps)
           common reduct
 ```
 
-Confluence. By Newman’s Lemma: termination + local confluence ⇒ unique ALR normal form.
+Confluence. By Newman’s Lemma: termination + local confluence \(\Rightarrow\) unique ALR normal form.
 
 Appendix G — Proofs: Parity-Free Identity for Survivors
 -------------------------------------------------------
@@ -348,7 +348,7 @@ Let \(F(S) = 1 - \exp(-(aS + bS^2)),\ g(S) = F(S) - S.\)
 ### H.14.1 Existence & subcriticality (paper-level)
 
 Since \(g(1) = F(1) - 1 = -e^{-(a+b)} < 0\) and \(g(1/2) \ge 0\) whenever \(\tfrac a2 + \tfrac b4 \ge \ln 2\), the Intermediate Value Theorem yields a fixed point \(S^* \in [1/2,1]\).
-If \(a + 2b < 1\), then \(F'(S) \le a + 2b ⇒ g'(S) \le a + 2b - 1 < 0\) on \([0,1]\); only \(S=0\) is a fixed point.
+If \(a + 2b < 1\), then \(F'(S) \le a + 2b \Rightarrow g'(S) \le a + 2b - 1 < 0\) on \([0,1]\); only \(S=0\) is a fixed point.
 
 ### H.14.2 Symbolic lower bounds (no numerics)
 
@@ -378,13 +378,13 @@ Stationary solver: matrix-free (Numba scatter), state size \(N = 7 \cdot 2 \cdot
 
 Measured coefficients:
 
-\(\mu_2^* = 0.475923,\quad \mu_3^* = 0.948573,\quad α_3 = 2.000000.\)
+\(\mu_2^* = 0.475923,\quad \mu_3^* = 0.948573,\quad \alpha_3 = 2.000000.\)
 
 Diagnostics:
 
 \(F(0.25) = 0.211444,\ F(0.50) = 0.509460,\ F(0.75) = 0.759272.\)
 Bracketed root \(g(S) = 0:\ S^*(W=13) = 0.448629 > 0.\)
-Ceiling \(1 - e^{-(\mu_2^* + α_3 \mu_3^*)} ≈ 0.906806.\)
+Ceiling \(1 - e^{-(\mu_2^* + \alpha_3 \mu_3^*)} \approx 0.906806.\)
 
 Stability note. \(F'(S^*) = (a + 2b S^*)(1 - S^*) > 1\) in this configuration; Picard iteration need not converge. Existence is certified by bracketing; coefficients come from the stationary distribution.
 
@@ -393,10 +393,10 @@ Appendix R — Replication Report (summary)
 
 Repo: https://github.com/Qcrumly/gof-replication — CC BY-NC 4.0.
 Engine: src/gof_validations.py (journeys, parity, ALR); tests cover tables, parity, ALR invariance.
-Panels: left/right/random; \(L ∈ \{10,20,30,40\}\), \(N = 20{,}000\) each.
+Panels: left/right/random; \(L \in \{10,20,30,40\}\), \(N = 20{,}000\) each.
 Reduced fraction (empirical): ~66% → 91% → 98% → 99%; parity preserved = 1.0 throughout.
 
-Constants (empirical sanity): \(λ ≈ 1/7,\ p_0 ≈ 1/14,\) parity even ≈ 0.5.
+Constants (empirical sanity): \(\lambda \approx 1/7,\ p_0 \approx 1/14\), parity even \approx 0.5.
 
 Artifacts (CI):
 results/panel_summary_*_L*_N*.json, results/panel_*_L*.jsonl, results/dashboard_*.png,
