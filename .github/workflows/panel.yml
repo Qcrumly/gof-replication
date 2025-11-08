@@ -1,0 +1,35 @@
+name: Panel & Dashboard (Artifacts)
+on:
+  workflow_dispatch:
+  push:
+    branches: [ feature/brackets-alr-panel-dashboard ]
+jobs:
+  panel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - run: pip install matplotlib
+      - run: python scripts/run_all.py --seed 1 && cp results/summary.json results/summary_seed1.json
+      - run: python scripts/run_all.py --seed 2 && cp results/summary.json results/summary_seed2.json
+      - run: python scripts/run_all.py --seed 3 && cp results/summary.json results/summary_seed3.json
+      - run: python scripts/run_panel.py --length 30 --samples 50000 --seed 123 --expr-mode random --panel-out results/panel_random_L30.jsonl --audit
+      - run: python scripts/dashboard.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gof-panel-and-dashboard
+          path: |
+            results/summary_seed1.json
+            results/summary_seed2.json
+            results/summary_seed3.json
+            results/panel_random_L30.jsonl
+            results/panel_summary_random_L30_N50000.json
+            results/dashboard_demo.png
+            results/dashboard_survivor_L30.png
+            artifacts/H14_fsa_config.json
+            artifacts/H14_fsa_report.json
